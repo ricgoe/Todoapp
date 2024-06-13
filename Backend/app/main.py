@@ -196,14 +196,14 @@ class Application:
     def show_all_lists(self) -> List[TaskListModel]:
         if self._is_populated():
             self.cursor.execute("SELECT id, name FROM tasklists")
-            return [TaskListModel(id = row[0], name = row[1]) for row in self.cursor.fetchall()]
+            return [TaskList(list_id= row[0], name = row[1], db_connection=self.dbconnection) for row in self.cursor.fetchall()]
         else:
             return []
 
     def print_all_todos_per_list(self, list_id) -> List[TaskModel]:      
         if self._is_populated(list_id=list_id):
             self.cursor.execute("SELECT id, name, description, status, priority FROM tasks WHERE list_id = ?", (list_id,))
-            return [TaskModel(id = row[0], name = row[1], description = row[2] if row[2] else "", status = Status(row[3]).value, priority = Priority(row[4]).value, list_id = list_id) for row in self.cursor.fetchall()]
+            return [Task(id = row[0], name = row[1], description = row[2] if row[2] else "", status = Status(row[3]).value, priority = Priority(row[4]).value, list_id = list_id, db_connection=self.dbconnection) for row in self.cursor.fetchall()]
         else:
             return []
               

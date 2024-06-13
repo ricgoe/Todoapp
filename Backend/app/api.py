@@ -34,13 +34,13 @@ def create_task_in_list(list_id: str, task_model: TaskModel, application: Applic
 
 @app.get("/lists", response_model= List[TaskListModel])
 def get_lists(application: Application = Depends(get_application)):
-    task_lists: list[TaskListModel] = application.show_all_lists()
-    return task_lists
+    task_lists: list[TaskList] = application.show_all_lists()
+    return [TaskListModel(id= task_list.list_id, name=task_list.name) for task_list in task_lists]
 
 @app.get("/lists/{list_id}/tasks", response_model= List[TaskModel])
 def get_task_in_list(list_id: str, application: Application = Depends(get_application)):
-    tasks: list[TaskModel] = application.print_all_todos_per_list(list_id)
-    return tasks
+    tasks: list[Task] = application.print_all_todos_per_list(list_id)
+    return [TaskModel(id = task.task_id, name=task.name, description=task.description, priority=task.priority, status=task.status, list_id=task.list_id) for task in tasks]
 
 @app.get("/lists/{list_id}/tasks/{task_id}", response_model= TaskModel)
 def get_task(list_id: str, task_id: str, application: Application = Depends(get_application)):
