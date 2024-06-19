@@ -203,7 +203,7 @@ class Application:
     def print_all_todos_per_list(self, list_id) -> List[TaskModel]:      
         if self._is_populated(list_id=list_id):
             self.cursor.execute("SELECT id, name, description, status, priority FROM tasks WHERE list_id = ?", (list_id,))
-            return [Task(id = row[0], name = row[1], description = row[2] if row[2] else "", status = Status(row[3]).value, priority = Priority(row[4]).value, list_id = list_id, db_connection=self.dbconnection) for row in self.cursor.fetchall()]
+            return [Task(task_id = row[0], name = row[1], description = row[2] if row[2] else "", status = Status(row[3]).value, priority = Priority(row[4]).value, list_id = list_id, db_connection=self.dbconnection) for row in self.cursor.fetchall()]
         else:
             return []
               
